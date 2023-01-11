@@ -10,13 +10,6 @@ public class Application {
     public static void main(String[] args) {
 
 
-//        logger.trace("trace level");
-//        logger.debug("debug level");
-//        logger.info("info level");
-//        logger.warn("warn level");
-//        logger.error("error level");
-//        logger.fatal("fatal level");
-
 
 
     }

@@ -2,14 +2,14 @@ package com.modulecode.net.impl;
 
 import com.modulecode.net.IConnection;
 import com.modulecode.net.IRouter;
-import com.modulecode.net.funcs.HandleFunc;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.Inet4Address;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Connection implements IConnection {
     private static final Logger logger = LogManager.getLogger(Connection.class);
@@ -42,16 +42,26 @@ public class Connection implements IConnection {
     private void startReader() throws IOException {
         logger.info("Reader is running...");
         for (; ; ) {
-            byte[] bytes = new byte[10];
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println(conn.getInputStream().available());
+            if (conn.getInputStream().available() == 0) {
+                continue;
+            }
+            //每次一次性读取多少字节
+            byte[] bytes = new byte[1024];
+            System.out.println(Arrays.toString(bytes));
+            System.out.println(new String(bytes, "utf-8"));
+            conn.getInputStream().read(bytes);
             //从路由，找到绑定的对应 router
             Request request = new Request(this, bytes);
-
             //执行注册的路由方法
             this.router.preHandle(request);
             this.router.handle(request);
             this.router.postHandle(request);
-//            int len = conn.getInputStream().read(bytes);
-//            handleAPI.handle(conn, bytes, len);
         }
 
 
@@ -72,7 +82,7 @@ public class Connection implements IConnection {
 
     @Override
     public Socket getTCPSocket() {
-        return null;
+        return conn;
     }
 
     @Override

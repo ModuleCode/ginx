@@ -1,5 +1,7 @@
 package com.modulecode.net;
 
+import java.io.IOException;
+
 /**
  * 提供连接请求全部接口声明,把请求的连接信息和请求数据包装到了 Request 中
  */

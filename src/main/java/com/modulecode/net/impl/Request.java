@@ -4,7 +4,6 @@ import com.modulecode.net.IConnection;
 import com.modulecode.net.IRequest;
 import com.modulecode.net.IRouter;
 
-import java.net.Socket;
 
 public class Request implements IRequest {
     //已经和客户端建立好的连接
@@ -19,7 +18,6 @@ public class Request implements IRequest {
     //得到当前连接
     @Override
     public IConnection getConnection() {
-
         return conn;
     }
 

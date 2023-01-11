@@ -23,12 +23,12 @@ public class Request implements IRequest {
 
     //获取数据
     @Override
-    public byte[] GetData() {
+    public byte[] getData() {
         return data;
     }
 
     @Override
-    public int GetMsgID() {
+    public int getMsgID() {
         return 0;
     }
 

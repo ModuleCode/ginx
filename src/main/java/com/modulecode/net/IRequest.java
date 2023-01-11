@@ -8,9 +8,9 @@ import java.io.IOException;
 public interface IRequest {
     IConnection getConnection();  //获取请求连接信息
 
-    byte[] GetData();            //获取请求消息的数据
+    byte[] getData();            //获取请求消息的数据
 
-    int GetMsgID();           //获取请求的消息ID
+    int getMsgID();           //获取请求的消息ID
 
     void bindRouter(IRouter router); //绑定这次请求由哪个路由处理
 

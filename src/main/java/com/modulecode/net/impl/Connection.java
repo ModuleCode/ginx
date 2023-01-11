@@ -5,6 +5,7 @@ import com.modulecode.net.IRouter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.Inet4Address;
@@ -42,20 +43,12 @@ public class Connection implements IConnection {
     private void startReader() throws IOException {
         logger.info("Reader is running...");
         for (; ; ) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            System.out.println(conn.getInputStream().available());
-            if (conn.getInputStream().available() == 0) {
-                continue;
-            }
+            //读取一个int的长度
+            DataInputStream dataInputStream = new DataInputStream(conn.getInputStream());
+            int len = dataInputStream.readInt();
             //每次一次性读取多少字节
-            byte[] bytes = new byte[1024];
-            System.out.println(Arrays.toString(bytes));
-            System.out.println(new String(bytes, "utf-8"));
-            conn.getInputStream().read(bytes);
+            byte[] bytes = new byte[len];
+            dataInputStream.read(bytes);
             //从路由，找到绑定的对应 router
             Request request = new Request(this, bytes);
             //执行注册的路由方法

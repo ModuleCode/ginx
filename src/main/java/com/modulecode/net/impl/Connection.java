@@ -1,6 +1,7 @@
 package com.modulecode.net.impl;
 
 import com.modulecode.net.IConnection;
+import com.modulecode.net.IRouter;
 import com.modulecode.net.funcs.HandleFunc;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,12 +16,13 @@ public class Connection implements IConnection {
     Socket conn;
     int connid;
     boolean isClosed;
-    //当前连接所绑定的处理业务api
-    HandleFunc handleAPI;
+
 
     //告诉当前连接已经退出/停止
     boolean exitChan;
 
+    //当前处理的router
+    IRouter router;
 
     @Override
     public void start() {
@@ -41,8 +43,15 @@ public class Connection implements IConnection {
         logger.info("Reader is running...");
         for (; ; ) {
             byte[] bytes = new byte[10];
-            int len = conn.getInputStream().read(bytes);
-            handleAPI.handle(conn, bytes, len);
+            //从路由，找到绑定的对应 router
+            Request request = new Request(this, bytes);
+
+            //执行注册的路由方法
+            this.router.preHandle(request);
+            this.router.handle(request);
+            this.router.postHandle(request);
+//            int len = conn.getInputStream().read(bytes);
+//            handleAPI.handle(conn, bytes, len);
         }
 
 
@@ -96,10 +105,10 @@ public class Connection implements IConnection {
 
     }
 
-    public Connection(Socket conn, int connid, HandleFunc callback) {
+    public Connection(Socket conn, int connid, IRouter router) {
         this.conn = conn;
         this.connid = connid;
-        this.handleAPI = callback;
+        this.router = router;
         this.isClosed = false;
         this.exitChan = false;
     }

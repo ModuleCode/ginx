@@ -11,6 +11,11 @@ public class Request implements IRequest {
     private IConnection conn;
     private byte[] data;
 
+    public Request(IConnection conn, byte[] data) {
+        this.conn = conn;
+        this.data = data;
+    }
+
     //得到当前连接
     @Override
     public IConnection getConnection() {

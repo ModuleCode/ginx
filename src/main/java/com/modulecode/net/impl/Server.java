@@ -17,6 +17,11 @@ public class Server implements IServer {
     private String ipVersion;
     private String ip;
     private int port;
+
+    //目前一个Server只能绑定一个 router
+    private IRouter router;
+
+
     //当前Server的消息管理模块，用来绑定MsgID和对应的处理方法
     private IMsgHandle msgHandler;
 
@@ -60,11 +65,7 @@ public class Server implements IServer {
             for (; ; ) {
                 //如果有客户端进入则会返回
                 Socket client = listener.accept();
-
-                Connection connection = new Connection(client, cid, (Socket socket, byte[] bytes, int len) -> {
-                    logger.info("[Conn Handle] CallBackToClient....{}", bytes);
-                    socket.getOutputStream().write(bytes);
-                });
+                Connection connection = new Connection(client, cid, router);
                 connection.start();
                 cid++;
             }
@@ -87,7 +88,8 @@ public class Server implements IServer {
 
     @Override
     public void addRouter(int msgID, IRouter router) {
-
+        this.router = router;
+        logger.info("添加路由{}成功", router);
     }
 
     @Override

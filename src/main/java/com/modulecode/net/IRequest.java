@@ -1,7 +1,7 @@
 package com.modulecode.net;
 
 /**
- * 提供连接请求全部接口声明
+ * 提供连接请求全部接口声明,把请求的连接信息和请求数据包装到了 Request 中
  */
 public interface IRequest {
     IConnection getConnection();  //获取请求连接信息

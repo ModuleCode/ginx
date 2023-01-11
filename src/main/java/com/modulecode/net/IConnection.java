@@ -1,12 +1,13 @@
 package com.modulecode.net;
 
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.Socket;
 
 public interface IConnection {
     void start();            //启动连接，让当前连接开始工作
 
-    void stop();                //停止连接，结束当前连接状态M
+    void stop() throws IOException;                //停止连接，结束当前连接状态M
 
     Socket getTCPSocket();  //从当前连接获取原始的socket Socket
 

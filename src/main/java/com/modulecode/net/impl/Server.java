@@ -1,6 +1,7 @@
 package com.modulecode.net.impl;
 
 import com.modulecode.net.*;
+import com.modulecode.net.funcs.HandleFunc;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,22 +54,19 @@ public class Server implements IServer {
     @Override
     public void start() {
         logger.info("[START] Server name: {},listenner at IP: {}, Port {} is starting", name, ip, port);
+        var cid = 0;
         try {
             ServerSocket listener = new ServerSocket(port, 50, Inet4Address.getByName(ip));
             for (; ; ) {
                 //如果有客户端进入则会返回
-                Socket conn = listener.accept();
-                new Thread(() -> {
-                    for (; ; ) {
-                        byte[] buf = new byte[5];
-                        try {
-                            conn.getInputStream().read(buf);
-                            conn.getOutputStream().write(buf);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }).start();
+                Socket client = listener.accept();
+
+                Connection connection = new Connection(client, cid, (Socket socket, byte[] bytes, int len) -> {
+                    logger.info("[Conn Handle] CallBackToClient....{}", bytes);
+                    socket.getOutputStream().write(bytes);
+                });
+                connection.start();
+                cid++;
             }
 
         } catch (IOException e) {

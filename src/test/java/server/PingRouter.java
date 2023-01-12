@@ -9,12 +9,43 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.*;
 
 public class PingRouter extends BaseRouter {
+    HashMap<String, String> keyword = new HashMap<>();
+    ArrayList keys = new ArrayList();
+
+    public PingRouter() {
+        keyword.put("机器人", "我不是机器人");
+        keyword.put("6", "你6个头");
+        keyword.put("傻逼", "6");
+        keyword.put("SB", "妈的你和谁说话呢?");
+        Set<String> strings = keyword.keySet();
+        Iterator<String> iterator = strings.iterator();
+        while (iterator.hasNext()) {
+            keys.add(iterator.next());
+        }
+    }
+
     @Override
     public void preHandle(IRequest request) throws IOException {
 
+
+        byte[] data = request.getData();
+        String str = new String(data, "utf-8");
+        System.out.println(str);
+        keys.forEach(key -> {
+            String returnText = keyword.get(key);
+            if (str.contains(key.toString())) {
+                try {
+                    DataOutputStream dataOutputStream = new DataOutputStream(request.getConnection().getTCPSocket().getOutputStream());
+                    dataOutputStream.writeInt(returnText.getBytes(StandardCharsets.UTF_8).length);
+                    dataOutputStream.write(returnText.getBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
 //        IConnection connection = request.getConnection();
 //        connection.getTCPSocket().getOutputStream().write("preHandle\n".getBytes());
@@ -22,12 +53,12 @@ public class PingRouter extends BaseRouter {
 
     @Override
     public void handle(IRequest request) throws IOException {
-        byte[] data = request.getData();
-        String binary = binary(data, 2);
-        IConnection connection = request.getConnection();
-        DataOutputStream dataOutputStream = new DataOutputStream(connection.getTCPSocket().getOutputStream());
-        dataOutputStream.writeInt(binary.getBytes(StandardCharsets.UTF_8).length);
-        dataOutputStream.write(binary.getBytes());
+//        byte[] data = request.getData();
+//        String binary = binary(data, 2);
+//        IConnection connection = request.getConnection();
+//        DataOutputStream dataOutputStream = new DataOutputStream(connection.getTCPSocket().getOutputStream());
+//        dataOutputStream.writeInt(binary.getBytes(StandardCharsets.UTF_8).length);
+//        dataOutputStream.write(binary.getBytes());
     }
 
     /**

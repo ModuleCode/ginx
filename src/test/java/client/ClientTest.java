@@ -30,7 +30,7 @@ public class ClientTest {
     }
 
     public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("127.0.0.1", 8999);
+        Socket socket = new Socket("127.0.0.1", 8800);
         Scanner scanner = new Scanner(System.in);
         try {
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -44,7 +44,7 @@ public class ClientTest {
                                     int len = inputStream.readInt();
                                     byte[] data = new byte[len];
                                     inputStream.read(data);
-                                    System.out.println("返回内容" + new String(data));
+                                    System.out.println("返回内容:" + new String(data));
                                 }
                             }
                         } catch (IOException e) {

@@ -25,7 +25,7 @@ public class Connection implements IConnection {
 
     @Override
     public void start() {
-        logger.info("Conn start().. connid= {}", connid);
+        logger.info("one player join in connid= {}", connid);
         //启动当前连接的读数据业务
         new Thread(() -> {
             try {
@@ -40,7 +40,6 @@ public class Connection implements IConnection {
     }
 
     private void startReader() throws IOException {
-        logger.info("Reader is running...");
         //循环读取
         for (; ; ) {
             //读取一个int的长度
@@ -48,8 +47,6 @@ public class Connection implements IConnection {
             int len = dataInputStream.readInt();
             //读取的id
             int id = dataInputStream.readInt();
-            logger.info(len);
-            logger.info(len>Integer.MAX_VALUE);
             //每次一次性读取多少字节
             byte[] bytes = new byte[len];
             dataInputStream.read(bytes);
@@ -84,7 +81,7 @@ public class Connection implements IConnection {
 
     @Override
     public int getConnID() {
-        return 0;
+        return connid;
     }
 
     @Override

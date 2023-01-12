@@ -4,6 +4,9 @@ import com.modulecode.net.IConnection;
 import com.modulecode.net.IRequest;
 import com.modulecode.net.IRouter;
 import com.modulecode.net.impl.BaseRouter;
+import com.modulecode.net.impl.Server;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class PingRouter extends BaseRouter {
+    private static final Logger logger = LogManager.getLogger(PingRouter.class);
     HashMap<String, String> keyword = new HashMap<>();
     ArrayList keys = new ArrayList();
 
@@ -31,6 +35,9 @@ public class PingRouter extends BaseRouter {
 
     @Override
     public void preHandle(IRequest request) throws IOException {
+        int connID = request.getConnection().getConnID();
+
+        logger.info("connID:{} " + request.getData("utf-8"), connID);
 //        System.out.println(request.getConnection().remoteAddr());
 //        System.out.println(request.getMsgID());
 //        System.out.println(request.getConnection().getConnID());

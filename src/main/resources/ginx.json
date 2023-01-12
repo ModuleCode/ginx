@@ -1,6 +1,5 @@
 {
-  "Name": "my server",
-  "Host": "0.0.0.0",
-  "TcpPort": 7777,
-  "MaxConn": 3
+  "name": "文档服务器",
+  "host": "127.0.0.1",
+  "tcpPort": "8956"
 }

@@ -1,6 +1,10 @@
 package com.modulecode.utils;
 
+import com.modulecode.entity.GinxConfig;
 import com.modulecode.net.IServer;
+
+import java.io.*;
+import java.net.URISyntaxException;
 
 /**
  * 存储一些关于 GINX 框架 的全局参数,供其他模块使用 用json配置
@@ -25,8 +29,31 @@ public class Global {
         this.maxPackSize = maxPackSize;
     }
 
-    public void reload() {
-        java.net.URL uri = this.getClass().getResource("/ginx.json");
-        System.out.println(uri);
+    public GinxConfig reloadGinxConfig(String url) {
+        java.net.URL uri = this.getClass().getResource(url);
+        if (uri == null) {
+            return null;
+        }
+        try {
+            File file = new File(uri.toURI());
+            FileInputStream fileInputStream = null;
+            fileInputStream = new FileInputStream(file);
+            DataInputStream dataInputStream = new DataInputStream(fileInputStream);
+            byte[] bytes = dataInputStream.readAllBytes();
+            GinxConfig ginxConfig = JacksonUtils.json2Bean(new String(bytes, "utf-8"), GinxConfig.class);
+            return ginxConfig;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public GinxConfig reloadGinxConfig() {
+        return this.reloadGinxConfig("/ginx.json");
     }
 }

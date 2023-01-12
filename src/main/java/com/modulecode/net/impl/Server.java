@@ -1,7 +1,9 @@
 package com.modulecode.net.impl;
 
+import com.modulecode.entity.GinxConfig;
 import com.modulecode.net.*;
 import com.modulecode.net.funcs.HandleFunc;
+import com.modulecode.utils.Global;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,10 +15,9 @@ import java.net.Socket;
 
 public class Server implements IServer {
     private static final Logger logger = LogManager.getLogger(Server.class);
-    private String name;
-    private String ipVersion;
-    private String ip;
-    private int port;
+    private GinxConfig ginxConfig;
+
+    private String configUrl; //配置文件路径
 
     //目前一个Server只能绑定一个 router
     private IRouter router;
@@ -43,26 +44,42 @@ public class Server implements IServer {
     }
 
     public Server() {
-        this.name = "SERVER";
-        this.ipVersion = "ipv4";
-        this.ip = "0.0.0.0";
-        this.port = 8999;
+        this.ginxConfig = new GinxConfig();
+        this.ginxConfig.setHost("0.0.0.0");
+        this.ginxConfig.setTcpPort(9090);
+        this.ginxConfig.setName("SERVER");
+        this.ginxConfig.setMaxConn(5);
+        this.ginxConfig.setIpVersion("IPV4");
+        printLogoImageStr();
+        //如果默认配置文件存在 就直接去覆盖当前配置
+        if (Global.global.reloadGinxConfig() != null) {
+            this.ginxConfig = Global.global.reloadGinxConfig();
+
+        }
     }
 
-    public Server(String name, String ipVersion, String ip, int port) {
-        this.name = name;
-        this.ipVersion = ipVersion;
-        this.ip = ip;
-        this.port = port;
+    //直接去读取指定的json文件
+    public Server(String configUrl) {
+        this.configUrl = configUrl;
+        this.ginxConfig = Global.global.reloadGinxConfig(configUrl);
+        printLogoImageStr();
+    }
+
+    public void printLogoImageStr() {
+        System.out.println(ginxConfig.getLogoImageStr());
+        System.out.printf("""
+                 ===========================================================================
+                 :: GINX ::                                                       (V%s)
+                """, ginxConfig.getVersion());
+
     }
 
     @Override
     public void start() {
-
-        logger.info("[START] Server name: {},listenner at IP: {}, Port {} is starting", name, ip,port);
+        logger.info("[START] Server name: {},listenner at IP: {}, Port {} is starting", ginxConfig.getName(), ginxConfig.getHost(), ginxConfig.getTcpPort());
         var cid = 0;
         try {
-            ServerSocket listener = new ServerSocket(port, 50, Inet4Address.getByName(ip));
+            ServerSocket listener = new ServerSocket(ginxConfig.getTcpPort(), 50, Inet4Address.getByName(ginxConfig.getHost()));
             for (; ; ) {
                 //如果有客户端进入则会返回
                 Socket client = listener.accept();

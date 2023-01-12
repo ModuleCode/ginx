@@ -13,12 +13,12 @@ public interface IRequest {
 
     int getMsgID();           //获取请求的消息ID
 
-    String getData(String charsetName) throws UnsupportedEncodingException; //获取请求消息字符串
-
-    void bindRouter(IRouter router); //绑定这次请求由哪个路由处理
-
-    void next();                     //转进到下一个处理器开始执行 但是调用此方法的函数会根据先后顺序逆序执行
-
-    void abort();                    //终止处理函数的运行 但调用此方法的函数会执行完毕
+    String getString(String charsetName) throws UnsupportedEncodingException; //获取请求消息字符串
+//
+//    void bindRouter(IRouter router); //绑定这次请求由哪个路由处理
+//
+//    void next();                     //转进到下一个处理器开始执行 但是调用此方法的函数会根据先后顺序逆序执行
+//
+//    void abort();                    //终止处理函数的运行 但调用此方法的函数会执行完毕
 
 }

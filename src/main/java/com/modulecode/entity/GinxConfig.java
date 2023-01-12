@@ -14,6 +14,7 @@ public class GinxConfig {
     private int tcpPort;
     private int maxConn;
     private String ipVersion;
+    private int maxPackageSize=10240*30;
     private String logoImageStr= """
                        
             ██╗  ██╗███████╗██╗     ██╗      ██████╗      ██████╗ ██╗███╗   ██╗██╗  ██╗

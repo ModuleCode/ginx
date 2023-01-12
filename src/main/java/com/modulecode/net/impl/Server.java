@@ -4,6 +4,8 @@ import com.modulecode.entity.GinxConfig;
 import com.modulecode.net.*;
 import com.modulecode.net.funcs.HandleFunc;
 import com.modulecode.utils.Global;
+import lombok.Data;
+import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +31,8 @@ public class Server implements IServer {
 
     //当前Server的链接管理器
     private IConnManager ConnMgr;
-    private IDataPack packet;
+    @Setter
+    private IDataPack dataPack;
 
     //TODO:不知道怎么去模拟go中的函数
     //该Server的连接创建时Hook函数
@@ -84,6 +87,7 @@ public class Server implements IServer {
                 //如果有客户端进入则会返回
                 Socket client = listener.accept();
                 Connection connection = new Connection(client, cid, router);
+                connection.setDataPack(dataPack);
                 connection.start();
                 cid++;
             }

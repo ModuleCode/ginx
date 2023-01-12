@@ -1,6 +1,7 @@
 package com.modulecode.net.impl;
 
 import com.modulecode.net.IConnection;
+import com.modulecode.net.IMessage;
 import com.modulecode.net.IRequest;
 import com.modulecode.net.IRouter;
 
@@ -10,11 +11,11 @@ import java.io.UnsupportedEncodingException;
 public class Request implements IRequest {
     //已经和客户端建立好的连接
     private IConnection conn;
-    private byte[] data;
+    private IMessage message;
 
-    public Request(IConnection conn, byte[] data) {
+    public Request(IConnection conn, IMessage message) {
         this.conn = conn;
-        this.data = data;
+        this.message = message;
     }
 
     //得到当前连接
@@ -23,35 +24,21 @@ public class Request implements IRequest {
         return conn;
     }
 
-    //获取数据
     @Override
     public byte[] getData() {
-        return data;
+        return this.message.getData();
     }
 
     @Override
     public int getMsgID() {
-        return 0;
+        return this.message.getMsgID();
     }
 
     @Override
-    public String getData(String charsetName) throws UnsupportedEncodingException {
-
-        return new String(data,charsetName);
+    public String getString(String charsetName) throws UnsupportedEncodingException {
+        return new String(this.message.getData(), charsetName);
     }
 
-    @Override
-    public void bindRouter(IRouter router) {
+    //获取数据
 
-    }
-
-    @Override
-    public void next() {
-
-    }
-
-    @Override
-    public void abort() {
-
-    }
 }

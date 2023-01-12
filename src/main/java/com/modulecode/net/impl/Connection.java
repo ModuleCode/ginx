@@ -1,7 +1,11 @@
 package com.modulecode.net.impl;
 
 import com.modulecode.net.IConnection;
+import com.modulecode.net.IDataPack;
+import com.modulecode.net.IMessage;
 import com.modulecode.net.IRouter;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,6 +26,9 @@ public class Connection implements IConnection {
 
     //当前处理的router
     IRouter router;
+    @Getter
+    @Setter
+    IDataPack dataPack;
 
     @Override
     public void start() {
@@ -41,21 +48,24 @@ public class Connection implements IConnection {
 
     private void startReader() throws IOException {
         //循环读取
+        //读取一个int的长度
+        DataInputStream dataInputStream = new DataInputStream(conn.getInputStream());
         for (; ; ) {
-            //读取一个int的长度
-            DataInputStream dataInputStream = new DataInputStream(conn.getInputStream());
-            int len = dataInputStream.readInt();
-            //读取的id
-            int id = dataInputStream.readInt();
-            //每次一次性读取多少字节
-            byte[] bytes = new byte[len];
-            dataInputStream.read(bytes);
-            //从路由，找到绑定的对应 router
-            Request request = new Request(this, bytes);
-            //执行注册的路由方法
-            this.router.preHandle(request);
-            this.router.handle(request);
-            this.router.postHandle(request);
+            if (dataInputStream.available() > 0) {
+                //如果这个包不存在 就创建
+                if (this.dataPack == null) {
+                    this.dataPack = new DataPack();
+                }
+                //从路由，找到绑定的对应 router
+                IDataPack dataPack = this.dataPack;
+                IMessage iMessage = dataPack.unPack(dataInputStream);
+                Request request = new Request(this, iMessage);
+                //执行注册的路由方法
+                this.router.preHandle(request);
+                this.router.handle(request);
+                this.router.postHandle(request);
+            }
+
         }
 
 
@@ -91,6 +101,13 @@ public class Connection implements IConnection {
 
     @Override
     public void sendMsg(int msgid, byte[] data) {
+
+        try {
+            byte[] binaryMsg = dataPack.pack(new Message(msgid, data.length, data));
+            conn.getOutputStream().write(binaryMsg);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

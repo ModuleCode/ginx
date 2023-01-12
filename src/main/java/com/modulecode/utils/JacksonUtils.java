@@ -30,12 +30,7 @@ public class JacksonUtils {
         }
     }
 
-    public static <T> T json2Bean(String jsonStr, Class<T> objClass) {
-        try {
+    public static <T> T json2Bean(String jsonStr, Class<T> objClass) throws IOException {
             return mapper.readValue(jsonStr, objClass);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }

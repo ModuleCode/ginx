@@ -38,10 +38,6 @@ public class PingRouter extends BaseRouter {
         int connID = request.getConnection().getConnID();
         logger.info("connID:{} " + request.getString("utf-8"), connID);
         request.getConnection().sendMsg(1, "HelloWorld".getBytes(StandardCharsets.UTF_8));
-
-
-
-
 //        System.out.println(request.getConnection().remoteAddr());
 //        System.out.println(request.getMsgID());
 //        System.out.println(request.getConnection().getConnID());

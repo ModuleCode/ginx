@@ -8,6 +8,8 @@ import com.modulecode.net.impl.BaseRouter;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.Inet4Address;
+import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -29,23 +31,29 @@ public class PingRouter extends BaseRouter {
 
     @Override
     public void preHandle(IRequest request) throws IOException {
-
-
-        byte[] data = request.getData();
-        String str = new String(data, "utf-8");
-        System.out.println(str);
-        keys.forEach(key -> {
-            String returnText = keyword.get(key);
-            if (str.contains(key.toString())) {
-                try {
-                    DataOutputStream dataOutputStream = new DataOutputStream(request.getConnection().getTCPSocket().getOutputStream());
-                    dataOutputStream.writeInt(returnText.getBytes(StandardCharsets.UTF_8).length);
-                    dataOutputStream.write(returnText.getBytes());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+//        System.out.println(request.getConnection().remoteAddr());
+//        System.out.println(request.getMsgID());
+//        System.out.println(request.getConnection().getConnID());
+//        System.out.println(request.getData("utf-8"));
+//        SocketAddress remoteSocketAddress = request.getConnection().getTCPSocket().getRemoteSocketAddress();
+//        System.out.println(remoteSocketAddress);
+//        byte[] data = request.getData();
+//        String str = new String(data, "utf-8");
+//        System.out.println(str);
+//        keys.forEach(key -> {
+//            String returnText = keyword.get(key);
+//            if (str.contains(key.toString())) {
+//                try {
+//                    int id = 0;
+//                    DataOutputStream dataOutputStream = new DataOutputStream(request.getConnection().getTCPSocket().getOutputStream());
+//                    dataOutputStream.writeInt(returnText.getBytes(StandardCharsets.UTF_8).length);
+//                    dataOutputStream.writeInt(id);
+//                    dataOutputStream.write(returnText.getBytes());
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        });
 
 //        IConnection connection = request.getConnection();
 //        connection.getTCPSocket().getOutputStream().write("preHandle\n".getBytes());

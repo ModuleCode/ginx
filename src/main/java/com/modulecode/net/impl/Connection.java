@@ -7,10 +7,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.Socket;
-import java.util.Arrays;
 
 public class Connection implements IConnection {
     private static final Logger logger = LogManager.getLogger(Connection.class);
@@ -33,7 +31,8 @@ public class Connection implements IConnection {
             try {
                 startReader();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println(e);
+                logger.error(e.getMessage());
             }
         }).start();
 
@@ -42,10 +41,15 @@ public class Connection implements IConnection {
 
     private void startReader() throws IOException {
         logger.info("Reader is running...");
+        //循环读取
         for (; ; ) {
             //读取一个int的长度
             DataInputStream dataInputStream = new DataInputStream(conn.getInputStream());
             int len = dataInputStream.readInt();
+            //读取的id
+            int id = dataInputStream.readInt();
+            logger.info(len);
+            logger.info(len>Integer.MAX_VALUE);
             //每次一次性读取多少字节
             byte[] bytes = new byte[len];
             dataInputStream.read(bytes);
@@ -84,8 +88,8 @@ public class Connection implements IConnection {
     }
 
     @Override
-    public Inet4Address remoteAddr() {
-        return null;
+    public InetAddress remoteAddr() {
+        return conn.getInetAddress();
     }
 
     @Override

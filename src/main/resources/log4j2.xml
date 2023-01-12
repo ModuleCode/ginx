@@ -4,7 +4,7 @@
         <Console name="Console" target="SYSTEM_OUT">
             <!--<PatternLayout pattern="%d %-5level [%t] %c{1.}.%M(%L): %msg%n"/>-->
             <PatternLayout
-                    pattern="%p %d %highlight{%-5level}{ERROR=Bright RED, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White} %style{[%t]}{bright,magenta} %style{%c{1.}.%M(%L)}{cyan}: %msg%n"/>
+                    pattern=" %d %highlight{%-5level}{ERROR=Bright RED, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White} %style{[%t]}{bright,magenta} %style{%c{1.}.%M(%L)}{cyan}: %msg%n"/>
 
         </Console>
         <Console name="STDOUT" target="SYSTEM_OUT">

@@ -1,7 +1,7 @@
 package com.modulecode.net;
 
 import java.io.IOException;
-import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public interface IConnection {
@@ -13,7 +13,7 @@ public interface IConnection {
 
     int getConnID();                //获取当前连接ID
 
-    Inet4Address remoteAddr();            //获取远程客户端地址信息
+    InetAddress remoteAddr();            //获取远程客户端地址信息
 
     void sendMsg(int msgid, byte[] data);         //直接将Message数据发送数据给远程的TCP客户端(无缓冲)
 

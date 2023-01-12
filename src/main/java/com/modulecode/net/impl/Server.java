@@ -58,7 +58,8 @@ public class Server implements IServer {
 
     @Override
     public void start() {
-        logger.info("[START] Server name: {},listenner at IP: {}, Port {} is starting", name, ip, port);
+
+        logger.info("[START] Server name: {},listenner at IP: {}, Port {} is starting", name, ip,port);
         var cid = 0;
         try {
             ServerSocket listener = new ServerSocket(port, 50, Inet4Address.getByName(ip));

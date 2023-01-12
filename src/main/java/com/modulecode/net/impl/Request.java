@@ -4,6 +4,8 @@ import com.modulecode.net.IConnection;
 import com.modulecode.net.IRequest;
 import com.modulecode.net.IRouter;
 
+import java.io.UnsupportedEncodingException;
+
 
 public class Request implements IRequest {
     //已经和客户端建立好的连接
@@ -30,6 +32,12 @@ public class Request implements IRequest {
     @Override
     public int getMsgID() {
         return 0;
+    }
+
+    @Override
+    public String getData(String charsetName) throws UnsupportedEncodingException {
+
+        return new String(data,charsetName);
     }
 
     @Override

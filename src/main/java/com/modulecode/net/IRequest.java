@@ -1,6 +1,7 @@
 package com.modulecode.net;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * 提供连接请求全部接口声明,把请求的连接信息和请求数据包装到了 Request 中
@@ -11,6 +12,8 @@ public interface IRequest {
     byte[] getData();            //获取请求消息的数据
 
     int getMsgID();           //获取请求的消息ID
+
+    String getData(String charsetName) throws UnsupportedEncodingException; //获取请求消息字符串
 
     void bindRouter(IRouter router); //绑定这次请求由哪个路由处理
 

@@ -1,0 +1,6 @@
+{
+  "Name": "my server",
+  "Host": "0.0.0.0",
+  "TcpPort": 7777,
+  "MaxConn": 3
+}

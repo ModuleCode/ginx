@@ -14,7 +14,11 @@ public interface IRequest {
     int getMsgID();           //获取请求的消息ID
 
     String getString(String charsetName) throws UnsupportedEncodingException; //获取请求消息字符串
-//
+
+    <T> T convertClass( Class<T> clazz) throws IOException;
+
+    <T> T convertClass( String charsetName, Class<T> clazz) throws IOException;
+
 //    void bindRouter(IRouter router); //绑定这次请求由哪个路由处理
 //
 //    void next();                     //转进到下一个处理器开始执行 但是调用此方法的函数会根据先后顺序逆序执行

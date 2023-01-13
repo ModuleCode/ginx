@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 public class MessageRouter extends BaseRouter {
-    private static final Logger logger = LogManager.getLogger(PingRouter.class);
+    private static final Logger logger = LogManager.getLogger(MessageRouter.class);
 
 
     @SneakyThrows
@@ -29,6 +29,7 @@ public class MessageRouter extends BaseRouter {
     public void handle(IRequest request) throws IOException {
         String jsonData = request.getString("utf-8");
         Message message = JacksonUtils.json2Bean(jsonData, Message.class);
+        System.out.println(message);
         String webMessage = getWebMessage(message.getMessage());
         logger.info(webMessage);
         request.getConnection().sendMsg(0, webMessage.getBytes(StandardCharsets.UTF_8));

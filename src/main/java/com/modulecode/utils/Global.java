@@ -30,15 +30,9 @@ public class Global {
     }
 
     public GinxConfig reloadGinxConfig(String url) {
-
-        java.net.URL uri = this.getClass().getResource(url);
-        if (uri == null) {
-            return null;
-        }
         try {
-            File file = new File(uri.toURI());
-            FileInputStream fileInputStream = new FileInputStream(file);
-            DataInputStream dataInputStream = new DataInputStream(fileInputStream);
+            InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(url);
+            DataInputStream dataInputStream = new DataInputStream(resourceAsStream);
             byte[] bytes = dataInputStream.readAllBytes();
             GinxConfig ginxConfig = JacksonUtils.json2Bean(new String(bytes, "utf-8"), GinxConfig.class);
             ginxConfig.setConfigUrl(url);
@@ -49,12 +43,10 @@ public class Global {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
         }
     }
 
     public GinxConfig reloadGinxConfig() {
-        return this.reloadGinxConfig("/ginx.json");
+        return this.reloadGinxConfig("ginx.json");
     }
 }

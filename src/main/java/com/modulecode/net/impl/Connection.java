@@ -54,6 +54,7 @@ public class Connection implements IConnection {
                 if (this.dataPack == null) {
                     this.dataPack = new DataPack();
                 }
+
                 //从路由，找到绑定的对应 router
                 IDataPack dataPack = this.dataPack;
                 IMessage iMessage = dataPack.unPack(dataInputStream);

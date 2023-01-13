@@ -54,7 +54,7 @@ public class Server implements IServer {
     @Override
     public void start() {
         int totalHandler = this.msgHandler.getHandlerCount();
-        logger.info("[HANDLERS] Now {} register {} handlers", ginxConfig.getName(), totalHandler);
+        logger.info("[HANDLERS] Now {} register {} handlers:{}", ginxConfig.getName(), totalHandler, msgHandler);
         logger.info("[START] Server name: {},listenner at IP: {}, Port {} is starting", ginxConfig.getName(), ginxConfig.getHost(), ginxConfig.getTcpPort());
         var cid = 0;
         try {

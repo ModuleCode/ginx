@@ -30,17 +30,18 @@ public class Global {
     }
 
     public GinxConfig reloadGinxConfig(String url) {
+
         java.net.URL uri = this.getClass().getResource(url);
         if (uri == null) {
             return null;
         }
         try {
             File file = new File(uri.toURI());
-            FileInputStream fileInputStream = null;
-            fileInputStream = new FileInputStream(file);
+            FileInputStream fileInputStream = new FileInputStream(file);
             DataInputStream dataInputStream = new DataInputStream(fileInputStream);
             byte[] bytes = dataInputStream.readAllBytes();
             GinxConfig ginxConfig = JacksonUtils.json2Bean(new String(bytes, "utf-8"), GinxConfig.class);
+            ginxConfig.setConfigUrl(url);
             return ginxConfig;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

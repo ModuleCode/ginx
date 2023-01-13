@@ -19,41 +19,23 @@ public class Server implements IServer {
     private static final Logger logger = LogManager.getLogger(Server.class);
     private GinxConfig ginxConfig;
 
-    private String configUrl; //配置文件路径
-
-    //目前一个Server只能绑定一个 router
-    private IRouter router;
-
-
     //当前Server的消息管理模块，用来绑定MsgID和对应的处理方法
     private IMsgHandle msgHandler;
-
-
-    //当前Server的链接管理器
-    private IConnManager ConnMgr;
     @Setter
     private IDataPack dataPack;
+    //当前Server的链接管理器
+    private IConnManager ConnMgr;
 
-    //TODO:不知道怎么去模拟go中的函数
-    //该Server的连接创建时Hook函数
-
-    void onConnStart(IConnection conn) {
-
-    }
-    //该Server的连接断开时的Hook函数
-
-    void onConnStop(IConnection conn) {
-
-    }
 
     public Server() {
+        this.msgHandler = new MsgHandle();
         this.ginxConfig = new GinxConfig();
         this.ginxConfig.setHost("0.0.0.0");
         this.ginxConfig.setTcpPort(9090);
         this.ginxConfig.setName("SERVER");
         this.ginxConfig.setMaxConn(5);
         this.ginxConfig.setIpVersion("IPV4");
-        printLogoImageStr();
+        this.ginxConfig.printLogoImageStr();
         //如果默认配置文件存在 就直接去覆盖当前配置
         if (Global.global.reloadGinxConfig() != null) {
             this.ginxConfig = Global.global.reloadGinxConfig();
@@ -63,22 +45,16 @@ public class Server implements IServer {
 
     //直接去读取指定的json文件
     public Server(String configUrl) {
-        this.configUrl = configUrl;
+        this.msgHandler = new MsgHandle();
         this.ginxConfig = Global.global.reloadGinxConfig(configUrl);
-        printLogoImageStr();
+        this.ginxConfig.printLogoImageStr();
     }
 
-    public void printLogoImageStr() {
-        System.out.println(ginxConfig.getLogoImageStr());
-        System.out.printf("""
-                 ===========================================================================
-                 :: GINX ::                                                       (V%s)
-                """, ginxConfig.getVersion());
-
-    }
 
     @Override
     public void start() {
+        int totalHandler = this.msgHandler.getHandlerCount();
+        logger.info("[HANDLERS] Now {} register {} handlers", ginxConfig.getName(), totalHandler);
         logger.info("[START] Server name: {},listenner at IP: {}, Port {} is starting", ginxConfig.getName(), ginxConfig.getHost(), ginxConfig.getTcpPort());
         var cid = 0;
         try {
@@ -86,7 +62,7 @@ public class Server implements IServer {
             for (; ; ) {
                 //如果有客户端进入则会返回
                 Socket client = listener.accept();
-                Connection connection = new Connection(client, cid, router);
+                Connection connection = new Connection(client, cid, msgHandler);
                 connection.setDataPack(dataPack);
                 connection.start();
                 cid++;
@@ -105,13 +81,13 @@ public class Server implements IServer {
 
     @Override
     public void serve() {
+
         start();
     }
 
     @Override
     public void addRouter(int msgID, IRouter router) {
-        this.router = router;
-        logger.info("添加路由{}成功", router);
+        msgHandler.addRouter(msgID, router);
     }
 
     @Override

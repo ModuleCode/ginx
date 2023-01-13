@@ -1,9 +1,6 @@
 package com.modulecode.net.impl;
 
-import com.modulecode.net.IConnection;
-import com.modulecode.net.IDataPack;
-import com.modulecode.net.IMessage;
-import com.modulecode.net.IRouter;
+import com.modulecode.net.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -24,11 +21,12 @@ public class Connection implements IConnection {
     //告诉当前连接已经退出/停止
     boolean exitChan;
 
-    //当前处理的router
-    IRouter router;
+    IMsgHandle msgHandle;
     @Getter
     @Setter
     IDataPack dataPack;
+
+    //当前服务器的消息管理模块
 
     @Override
     public void start() {
@@ -61,9 +59,7 @@ public class Connection implements IConnection {
                 IMessage iMessage = dataPack.unPack(dataInputStream);
                 Request request = new Request(this, iMessage);
                 //执行注册的路由方法
-                this.router.preHandle(request);
-                this.router.handle(request);
-                this.router.postHandle(request);
+                msgHandle.doMsgHandler(request);
             }
 
         }
@@ -126,10 +122,10 @@ public class Connection implements IConnection {
 
     }
 
-    public Connection(Socket conn, int connid, IRouter router) {
+    public Connection(Socket conn, int connid, IMsgHandle msgHandle) {
         this.conn = conn;
         this.connid = connid;
-        this.router = router;
+        this.msgHandle = msgHandle;
         this.isClosed = false;
         this.exitChan = false;
     }

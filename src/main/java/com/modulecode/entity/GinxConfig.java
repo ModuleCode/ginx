@@ -8,14 +8,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GinxConfig {
-    private String version="1.0.0";
+    private String configUrl; //配置文件路径
+    private String version = "1.0.0";
     private String name;
     private String host;
     private int tcpPort;
     private int maxConn;
     private String ipVersion;
-    private int maxPackageSize=10240*30;
-    private String logoImageStr= """
+    private int maxPackageSize = 10240 * 30;
+    private String logoImageStr = """
                        
             ██╗  ██╗███████╗██╗     ██╗      ██████╗      ██████╗ ██╗███╗   ██╗██╗  ██╗
             ██║  ██║██╔════╝██║     ██║     ██╔═══██╗    ██╔════╝ ██║████╗  ██║╚██╗██╔╝
@@ -24,4 +25,14 @@ public class GinxConfig {
             ██║  ██║███████╗███████╗███████╗╚██████╔╝    ╚██████╔╝██║██║ ╚████║██╔╝ ██╗
             ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝      ╚═════╝ ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
             """;
+
+    public void printLogoImageStr() {
+        System.out.println(this.getLogoImageStr());
+        System.out.printf("""
+                 ===========================================================================
+                 :: GINX ::                                                       (V%s)
+                """, this.getVersion());
+
+    }
+
 }

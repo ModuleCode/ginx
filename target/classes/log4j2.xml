@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--<PatternLayout pattern="%d %-5level [%t] %c{1.}.%M(%L): %msg%n"/>-->
+            <PatternLayout
+                    pattern=" %d %highlight{%-5level}{ERROR=Bright RED, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White} %style{[%t]}{bright,magenta} %style{%c{1.}.%M(%L)}{cyan}: %msg%n"/>
+
+        </Console>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{dd/MM/yyyy HH:mm:ss,SSS}] [%-7p] %c{1}:%L (%t) - %m%n"/>
+        </Console>
+        <Console name="BASE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m %p %r %c  %c %t %L line%n "/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <root level="trace">
+            <appender-ref ref="Console"/>
+        </root>
+    </Loggers>
+</configuration>

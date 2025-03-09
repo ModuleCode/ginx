@@ -12,20 +12,19 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <log4j2.version>2.6.2</log4j2.version>
+        <log4j2.version>2.24.3</log4j2.version>
     </properties>
     <dependencies>
+        <!-- Log4j 2.x 核心依赖 -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>${log4j2.version}</version>
-            <scope>provided</scope>
+            <version>2.20.0</version> <!-- 使用最新稳定版本 -->
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>${log4j2.version}</version>
-            <scope>provided</scope>
+            <version>2.20.0</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -40,6 +39,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

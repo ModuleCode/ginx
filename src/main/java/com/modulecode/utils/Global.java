@@ -34,7 +34,6 @@ public class Global {
             InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(url);
             DataInputStream dataInputStream = new DataInputStream(resourceAsStream);
             byte[] bytes = dataInputStream.readAllBytes();
-            System.out.println(new String(bytes, "utf-8"));
             GinxConfig ginxConfig = JacksonUtils.json2Bean(new String(bytes, "utf-8"), GinxConfig.class);
             ginxConfig.setConfigUrl(url);
             return ginxConfig;
